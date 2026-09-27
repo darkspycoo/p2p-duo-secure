@@ -1,0 +1,7 @@
+tunnel: <YOUR_TUNNEL_UUID>
+credentials-file: C:\Users\rguru\.gemini\antigravity\scratch\p2p-duo-secure\cloudflare-cert.pem
+
+ingress:
+  - hostname: call.114221.com   # replace with a DNS record you own in Cloudflare
+    service: http://localhost:3000
+  - service: http_status:404

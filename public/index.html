@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>114221 - Private 2-Peer Call</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔒</text></svg>">
+</head>
+<body>
+
+  <!-- Top App Navigation -->
+  <header class="navbar" id="main-navbar">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1>114221</h1>
+        <span>Private 2-Peer Call</span>
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 8px;">
+      <div class="badge badge-secure">
+        <span class="badge-dot"></span>
+        <span>Voice-First E2EE</span>
+      </div>
+      <div class="badge">
+        <span>🔒 2-Person Lock</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Notification Banner -->
+  <div id="toast-banner" class="toast-banner">
+    <span id="toast-text">Notification message</span>
+  </div>
+
+  <!-- Main Stage -->
+  <main class="main-content">
+
+    <!-- LOBBY SCREEN -->
+    <section id="lobby-view">
+      <div class="card glass">
+        <div class="card-header">
+          <h2>Start 114221 Private Call</h2>
+          <p>Calls initiate as <strong>crystal-clear HD Voice</strong> by default to conserve battery and weak cellular tower signal, with 1-tap conversion to Video Call anytime.</p>
+        </div>
+
+        <form id="join-form" onsubmit="event.preventDefault(); window.app.joinRoom();">
+          <div class="form-group">
+            <label for="room-input">Room ID</label>
+            <div class="input-with-button">
+              <input type="text" id="room-input" class="input-field" placeholder="e.g. stealth-echo-42" required autocomplete="off" />
+              <button type="button" class="btn btn-secondary" id="btn-gen-room" title="Generate Random ID">🎲 New</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="passphrase-input">
+              <span>E2EE Passphrase / Secret</span>
+              <small style="color: var(--wa-green); text-transform: none; margin-left: 6px;">(Zero-Knowledge)</small>
+            </label>
+            <div class="input-with-button">
+              <input type="password" id="passphrase-input" class="input-field" placeholder="Shared secret" required autocomplete="off" />
+              <button type="button" class="btn btn-secondary" id="btn-toggle-pwd">👁️</button>
+              <button type="button" class="btn btn-secondary" id="btn-gen-key">🔑 256-bit</button>
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 10px; margin-top: 24px;">
+            <button type="submit" class="btn btn-primary" style="flex: 1;" id="btn-join-room">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+              </svg>
+              Start Voice Call
+            </button>
+            <button type="button" class="btn btn-secondary" id="btn-copy-invite">
+              📋 Copy Link
+            </button>
+          </div>
+        </form>
+
+        <div class="feature-pill-grid">
+          <div class="feature-pill">
+            <span class="feature-pill-icon">📞</span>
+            <div>
+              <div class="feature-pill-title">Voice-First Default</div>
+              <div class="feature-pill-desc">Starts as light audio call, upgrade to video on demand.</div>
+            </div>
+          </div>
+          <div class="feature-pill">
+            <span class="feature-pill-icon">🔄</span>
+            <div>
+              <div class="feature-pill-title">Front & Back Flip</div>
+              <div class="feature-pill-desc">1-tap camera flip for both mobile devices.</div>
+            </div>
+          </div>
+          <div class="feature-pill">
+            <span class="feature-pill-icon">🔒</span>
+            <div>
+              <div class="feature-pill-title">Strict 2-Person Limit</div>
+              <div class="feature-pill-desc">Room auto-locks. Rejects 3rd party instantly.</div>
+            </div>
+          </div>
+          <div class="feature-pill">
+            <span class="feature-pill-icon">📶</span>
+            <div>
+              <div class="feature-pill-title">Low Tower Signal Guard</div>
+              <div class="feature-pill-desc">Opus in-band FEC audio packet recovery.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Device Audio Meter Check -->
+      <div class="card glass" style="text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 12px;">🎙️</div>
+        <h3>HD Microphone Ready</h3>
+        <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 6px; margin-bottom: 16px;">
+          Speak to test your voice level before calling.
+        </p>
+
+        <div style="display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.3); padding: 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+          <div style="flex: 1; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden;">
+            <div id="audio-meter-fill" style="height: 100%; width: 0%; background: var(--wa-green); transition: width 0.08s;"></div>
+          </div>
+          <span style="font-size: 0.72rem; color: var(--text-secondary);">Mic Input</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHATSAPP CALL VIEW -->
+    <section id="call-view">
+      <div class="call-layout">
+
+        <!-- Top Call Header (WhatsApp Style) -->
+        <div class="wa-call-header">
+          <div class="wa-caller-meta">
+            <div class="wa-e2ee-tag">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <span>114221 End-to-end encrypted</span>
+            </div>
+            <div class="wa-caller-name" id="call-partner-name">114221 Private Partner</div>
+            <div class="wa-call-status" id="call-status-timer">Ringing...</div>
+          </div>
+
+          <div class="wa-header-actions">
+            <!-- Cellular Tower Signal Indicator -->
+            <div class="hud-pill glass" id="hud-signal-btn" title="Tower Signal Quality">
+              <div class="tower-signal-widget">
+                <div class="signal-bar active" id="sig-bar-1"></div>
+                <div class="signal-bar active" id="sig-bar-2"></div>
+                <div class="signal-bar active" id="sig-bar-3"></div>
+                <div class="signal-bar active" id="sig-bar-4"></div>
+                <div class="signal-bar active" id="sig-bar-5"></div>
+              </div>
+              <span id="hud-signal-label" style="font-weight: 600;">5G / HD</span>
+            </div>
+
+            <!-- E2EE Safety Shield -->
+            <div class="hud-pill glass" id="hud-e2ee-verify" title="Verify Safety Fingerprint">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--wa-green)" stroke-width="2.4">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- CENTER: WHATSAPP VOICE CALL AVATAR STAGE -->
+        <div class="voice-stage-center" id="voice-stage-center">
+          <div class="avatar-pulse-container">
+            <div class="pulse-ring"></div>
+            <div class="pulse-ring"></div>
+            <div class="wa-large-avatar" id="caller-avatar">
+              👤
+            </div>
+          </div>
+
+          <!-- Quick Convert to Video Call Button -->
+          <div class="voice-upgrade-prompt" id="btn-quick-upgrade-video" title="Convert this voice call to a video call">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="23 7 16 12 23 17 23 7"/>
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+            </svg>
+            <span>Switch to Video Call</span>
+          </div>
+        </div>
+
+        <!-- VIDEO STAGE (Full-Screen Remote Video + Floating Local PiP) -->
+        <div class="video-stage-container" id="video-stage-container">
+          <video id="remote-video" autoplay playsinline></video>
+
+          <!-- Remote Camera Off Overlay -->
+          <div class="remote-cam-off-overlay" id="remote-cam-off-overlay">
+            <div class="wa-large-avatar" style="width: 100px; height: 100px; font-size: 2.8rem;">👤</div>
+            <span>Remote Camera Off</span>
+          </div>
+
+          <!-- WhatsApp Picture-in-Picture Local Feed with Quick-Flip Button -->
+          <div class="wa-pip-container" id="pip-container">
+            <video id="local-video" autoplay playsinline muted></video>
+            <!-- Quick Camera Flip button on PiP window -->
+            <button class="pip-flip-btn" id="btn-pip-flip" title="Flip Camera (Front/Rear)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+                <path d="M20 10c0-4.42-3.58-8-8-8s-8 3.58-8 8c0 .34.02.67.06 1L1 8l4 6 4-6-2.5 2.5C6.18 10.33 6.09 10.17 6.09 10c0-3.26 2.65-5.91 5.91-5.91s5.91 2.65 5.91 5.91c0 2.21-1.22 4.14-3 5.16v2.18c2.86-1.19 4.91-3.99 4.91-7.34z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- FLOATING WHATSAPP CALL CONTROLS BAR -->
+        <div class="wa-control-bar">
+          <!-- 1. Mute / Unmute Microphone -->
+          <button class="wa-btn" id="btn-call-mic" title="Mute Microphone">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+              <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+              <line x1="12" y1="19" x2="12" y2="23"/>
+              <line x1="8" y1="23" x2="16" y2="23"/>
+            </svg>
+          </button>
+
+          <!-- 2. Video Camera Toggle (Tap to Start Video / Stop Video) -->
+          <button class="wa-btn" id="btn-call-video" title="Switch between Voice and Video Call">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="23 7 16 12 23 17 23 7"/>
+              <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+            </svg>
+          </button>
+
+          <!-- 3. Flip Camera (Front / Rear for phones) -->
+          <button class="wa-btn" id="btn-call-flip" title="Flip Camera Front/Back" style="display: none;">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3">
+              <path d="M20 10c0-4.42-3.58-8-8-8s-8 3.58-8 8c0 .34.02.67.06 1L1 8l4 6 4-6-2.5 2.5C6.18 10.33 6.09 10.17 6.09 10c0-3.26 2.65-5.91 5.91-5.91s5.91 2.65 5.91 5.91c0 2.21-1.22 4.14-3 5.16v2.18c2.86-1.19 4.91-3.99 4.91-7.34z"/>
+            </svg>
+          </button>
+
+          <!-- 4. Low-Signal Mode Saver -->
+          <button class="wa-btn" id="btn-call-low-signal" title="Force Low-Signal Saver (HD Voice Priority)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+              <path d="M1.42 9a16 16 0 0 1 21.16 0"/>
+              <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+              <line x1="12" y1="20" x2="12.01" y2="20"/>
+            </svg>
+          </button>
+
+          <!-- 5. Encrypted Chat Drawer -->
+          <button class="wa-btn" id="btn-call-chat" title="Encrypted Chat">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+            </svg>
+            <span class="unread-badge" id="chat-unread-badge">0</span>
+          </button>
+
+          <!-- 6. End Call Button (Red Circle) -->
+          <button class="wa-btn wa-btn-hangup" id="btn-call-end" title="End Call">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7 2 2 0 0 1 1.72 2v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.42 19.42 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91"/>
+              <line x1="23" y1="1" x2="1" y2="23"/>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Encrypted Chat Drawer -->
+        <aside class="chat-drawer" id="chat-drawer">
+          <div class="chat-header">
+            <h3 style="font-size: 0.95rem; display: flex; align-items: center; gap: 8px;">
+              <span style="color: var(--wa-green);">🔒</span> 114221 Peer Chat
+            </h3>
+            <div style="display: flex; gap: 6px;">
+              <button class="btn btn-secondary" style="padding: 6px 10px; font-size: 0.76rem;" id="btn-clear-chat">Clear</button>
+              <button class="modal-close" id="btn-close-chat">&times;</button>
+            </div>
+          </div>
+
+          <div class="chat-messages" id="chat-messages-container">
+            <div style="text-align: center; color: var(--text-secondary); font-size: 0.74rem; padding: 10px;">
+              🔒 Direct Peer-to-Peer AES-256-GCM encrypted. Zero server storage.
+            </div>
+          </div>
+
+          <form class="chat-input-area" id="chat-form" onsubmit="event.preventDefault(); window.app.sendChatMessage();">
+            <input type="text" id="chat-input" placeholder="Type a message..." autocomplete="off" />
+            <button type="submit" class="btn btn-primary" style="padding: 10px 16px;">
+              ➤
+            </button>
+          </form>
+        </aside>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: SAFETY NUMBERS VERIFICATION -->
+  <div class="modal-overlay" id="modal-safety">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>114221 Safety Numbers</h3>
+        <button class="modal-close" onclick="window.app.closeModal('modal-safety')">&times;</button>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 14px;">
+        Compare these emojis & digits with the other person to confirm complete end-to-end encryption privacy:
+      </p>
+      <div class="security-numbers-box">
+        <div class="safety-emojis" id="safety-emojis">🔒 🛡️ ⚡ 💎</div>
+        <div class="safety-digits" id="safety-digits">0000 0000 0000</div>
+      </div>
+      <button class="btn btn-primary" style="width: 100%;" onclick="window.app.closeModal('modal-safety')">
+        Verify & Close
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: TELEMETRY -->
+  <div class="modal-overlay" id="modal-telemetry">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Cellular Signal & Telemetry</h3>
+        <button class="modal-close" onclick="window.app.closeModal('modal-telemetry')">&times;</button>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px;">
+        <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
+          <span style="font-size: 0.7rem; color: var(--text-secondary); display: block;">LATENCY (RTT)</span>
+          <strong id="stat-rtt">0 ms</strong>
+        </div>
+        <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
+          <span style="font-size: 0.7rem; color: var(--text-secondary); display: block;">PACKET LOSS</span>
+          <strong id="stat-loss">0%</strong>
+        </div>
+        <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
+          <span style="font-size: 0.7rem; color: var(--text-secondary); display: block;">BITRATE</span>
+          <strong id="stat-bitrate">0 / 0 kbps</strong>
+        </div>
+        <div style="background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px;">
+          <span style="font-size: 0.7rem; color: var(--text-secondary); display: block;">AUDIO JITTER</span>
+          <strong id="stat-jitter">0 ms</strong>
+        </div>
+      </div>
+      <button class="btn btn-secondary" style="width: 100%;" onclick="window.app.closeModal('modal-telemetry')">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: REJECTED -->
+  <div class="modal-overlay" id="modal-rejected">
+    <div class="modal-content" style="text-align: center;">
+      <div style="font-size: 3rem; margin-bottom: 10px;">🚫</div>
+      <h3 style="color: var(--wa-danger); margin-bottom: 10px;">Session Full & Locked</h3>
+      <p id="rejected-message" style="color: var(--text-secondary); font-size: 0.88rem; margin-bottom: 20px;">
+        This private room already has 2 participants and is strictly locked.
+      </p>
+      <button class="btn btn-secondary" style="width: 100%;" onclick="window.location.reload()">
+        Back to Lobby
+      </button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/crypto.js"></script>
+  <script src="js/signal-hud.js"></script>
+  <script src="js/webrtc.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+{
+  "name": "p2p-duo-secure",
+  "version": "1.0.0",
+  "description": "Ultra-private, 2-person end-to-end encrypted voice, HD video and chat with low-tower signal optimization",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "webrtc",
+    "e2ee",
+    "private",
+    "encryption",
+    "video-call",
+    "hd-voice",
+    "p2p"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.2",
+    "ws": "^8.18.0"
+  }
+}
